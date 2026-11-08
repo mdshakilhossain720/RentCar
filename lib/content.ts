@@ -226,7 +226,7 @@ export const testimonials: Testimonial[] = [
 export const faqs = [
   {
     q: "How can I book a rental car?",
-    a: "Browse our fleet, open the car you like and fill in the booking form — or tap the WhatsApp button and send us your trip details. Our team confirms availability and the final price before your booking is locked in.",
+    a: "Browse our fleet, open the car you like and fill in the booking form — or call or WhatsApp us with your trip details. Our team confirms availability and the final price before your booking is locked in.",
   },
   {
     q: "Do you provide cars with drivers?",
@@ -254,6 +254,6 @@ export const faqs = [
   },
   {
     q: "How can I contact customer support?",
-    a: "Call or WhatsApp us any time — support is available 24/7. You can also email us or send a message through the contact form and we will reply as quickly as possible.",
+    a: "Call or WhatsApp us on 01919034366 any time — we are open 24 hours, 7 days a week. You can also visit our office in Sector 14, Uttara, or send a message through the contact form.",
   },
 ]

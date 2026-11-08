@@ -25,7 +25,7 @@ export function Hero() {
   const scale = useTransform(scrollYProgress, [0, 1], [1.05, reduce ? 1.05 : 1.15])
 
   return (
-    <section id="home" ref={ref} className="relative isolate overflow-hidden pt-20">
+    <section id="home" ref={ref} className="relative isolate overflow-hidden pt-20 md:pt-29">
       <motion.div style={{ y, scale }} className="absolute inset-0 -z-10">
         <Image
           src="/images/site/hero.jpg"
@@ -49,7 +49,7 @@ export function Hero() {
         className="absolute top-1/3 -left-40 -z-10 size-[36rem] rounded-full bg-gold/10 blur-[120px]"
       />
 
-      <div className="container-x flex min-h-[calc(100svh-5rem)] flex-col justify-center gap-12 py-16 lg:py-20">
+      <div className="container-x flex min-h-[calc(100svh-5rem)] md:min-h-[calc(100svh-7.25rem)] flex-col justify-center gap-12 py-16 lg:py-20">
         <div className="max-w-3xl">
           <motion.p
             initial={{ opacity: 0, y: 16 }}

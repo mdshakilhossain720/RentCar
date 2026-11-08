@@ -3,8 +3,8 @@
  *
  * DEMO DATA — models, years and rates are illustrative placeholders based on
  * typical Dhaka rental listings. They are NOT live availability or quotes.
- * Replace with the company's real fleet (or load from a CMS/API) before launch.
- * All prices are in BDT.
+ * Replace with the company's real fleet before launch. Prices are in BDT;
+ * a null price is shown as "Contact for Price".
  */
 
 export const categories = [
@@ -47,8 +47,8 @@ export type Vehicle = {
   transmission: "Automatic" | "Manual"
   fuel: "Octane" | "Hybrid" | "Diesel" | "Octane / CNG"
   ac: boolean
-  dailyPrice: number
-  monthlyPrice: number
+  dailyPrice: number | null
+  monthlyPrice: number | null
   images: VehicleImage[]
   summary: string
   features: string[]
@@ -309,7 +309,7 @@ export const vehicles: Vehicle[] = [
     fuel: "Hybrid",
     ac: true,
     dailyPrice: 18000,
-    monthlyPrice: 380000,
+    monthlyPrice: null,
     images: [
       {
         src: "/images/fleet/bmw5-1.jpg",
@@ -339,8 +339,8 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     fuel: "Diesel",
     ac: true,
-    dailyPrice: 25000,
-    monthlyPrice: 520000,
+    dailyPrice: null,
+    monthlyPrice: null,
     images: [
       {
         src: "/images/fleet/rangerover-1.jpg",
@@ -457,17 +457,25 @@ export function getRelatedVehicles(vehicle: Vehicle, count = 3) {
   return [...sameCategory, ...others].slice(0, count)
 }
 
-/** Lowest daily/monthly rate across the fleet (optionally for one category). */
+/** Lowest listed daily/monthly rate across the fleet (null prices ignored). */
 export function startingPrice(
   kind: "dailyPrice" | "monthlyPrice",
   filter?: (v: Vehicle) => boolean
 ) {
-  const list = filter ? vehicles.filter(filter) : vehicles
-  return Math.min(...list.map((v) => v[kind]))
+  const list = (filter ? vehicles.filter(filter) : vehicles)
+    .map((v) => v[kind])
+    .filter((p): p is number => p !== null)
+  return list.length ? Math.min(...list) : null
 }
+
+export const CONTACT_FOR_PRICE = "Contact for Price"
 
 const bdt = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 })
 
 export function formatBDT(amount: number) {
   return `৳${bdt.format(amount)}`
+}
+
+export function formatPrice(amount: number | null) {
+  return amount === null ? CONTACT_FOR_PRICE : formatBDT(amount)
 }

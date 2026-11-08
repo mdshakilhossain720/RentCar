@@ -58,11 +58,12 @@ export function FleetExplorer({
     })
     const sorted = [...list]
     switch (sort) {
+      // Vehicles without a listed price ("Contact for Price") sort last.
       case "price-asc":
-        sorted.sort((a, b) => a.dailyPrice - b.dailyPrice)
+        sorted.sort((a, b) => (a.dailyPrice ?? Infinity) - (b.dailyPrice ?? Infinity))
         break
       case "price-desc":
-        sorted.sort((a, b) => b.dailyPrice - a.dailyPrice)
+        sorted.sort((a, b) => (b.dailyPrice ?? -Infinity) - (a.dailyPrice ?? -Infinity))
         break
       case "seats-desc":
         sorted.sort((a, b) => b.passengers - a.passengers)
@@ -122,7 +123,7 @@ export function FleetExplorer({
                   />
                 ) : null}
                 <span className="relative">
-                  {c === "All" ? "All Vehicles" : categoryLabels[c]}
+                  {c === "All" ? "All Cars" : c}
                   <span className={cn("ml-1.5 text-xs", active ? "opacity-70" : "text-muted-foreground")}>
                     {counts.get(c) ?? 0}
                   </span>
@@ -165,8 +166,9 @@ export function FleetExplorer({
         </div>
 
         <p className="text-sm text-muted-foreground" aria-live="polite">
-          Showing <span className="text-foreground">{visible.length}</span> of{" "}
-          {results.length} {results.length === 1 ? "vehicle" : "vehicles"}
+          {limit ? "Found" : "Showing"}{" "}
+          <span className="text-foreground">{results.length}</span>{" "}
+          {results.length === 1 ? "vehicle" : "vehicles"}
           {category !== "All" ? ` in ${categoryLabels[category]}` : ""}
           {deferredSearch.trim() ? ` matching “${deferredSearch.trim()}”` : ""}
         </p>
@@ -177,14 +179,16 @@ export function FleetExplorer({
         <motion.ul
           layout
           className={cn(
-            "grid gap-6 transition-opacity md:grid-cols-2 xl:grid-cols-3",
+            "grid gap-6 transition-opacity md:grid-cols-2 lg:grid-cols-3 desk:grid-cols-4",
             isStale && "opacity-60"
           )}
         >
           <AnimatePresence mode="popLayout" initial={false}>
-            {visible.map((v) => (
+            {visible.map((v, i) => (
               <motion.li
                 key={v.slug}
+                // Home preview: 6 cards (full rows of 2/3) below 1440px, 8 (4×2) above.
+                className={limit && i >= 6 ? "hidden desk:block" : undefined}
                 layout
                 initial={{ opacity: 0, scale: 0.96 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -218,7 +222,7 @@ export function FleetExplorer({
         </div>
       )}
 
-      {limit && results.length > limit ? (
+      {limit && results.length > Math.min(limit, 6) ? (
         <div className="flex justify-center">
           <Link href="/fleet" className={buttonVariants({ variant: "gold-outline", size: "xl" })}>
             View all {results.length} vehicles

@@ -1,25 +1,36 @@
+import Image from "next/image"
 import Link from "next/link"
-import { CarFront } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { site } from "@/lib/site"
 
-export function Logo({ className }: { className?: string }) {
+export function Logo({
+  className,
+  size = "md",
+}: {
+  className?: string
+  size?: "md" | "lg"
+}) {
+  const px = size === "lg" ? 64 : 52
   return (
     <Link
       href="/"
-      aria-label={`${site.name} — home`}
-      className={cn("group flex items-center gap-3", className)}
+      aria-label={`${site.nameEn} — home`}
+      className={cn("group flex min-w-0 items-center gap-3", className)}
     >
-      <span className="grid size-11 place-items-center rounded-xl border border-gold/40 bg-black shadow-[inset_0_0_20px] shadow-gold/10 transition group-hover:border-gold">
-        <CarFront className="size-5 text-gold" strokeWidth={1.75} />
-      </span>
-      <span className="flex flex-col leading-none">
-        <span className="font-display text-lg font-bold tracking-[0.18em] whitespace-nowrap">
-          RENT <span className="text-gold">A</span> CAR
+      <Image
+        src={site.logo}
+        alt="Rent A Car Motor Society, Uttara logo"
+        width={px}
+        height={px}
+        className="shrink-0 rounded-full drop-shadow-[0_0_14px_rgba(226,185,85,0.25)] transition-transform duration-500 group-hover:rotate-[8deg]"
+      />
+      <span className="flex min-w-0 flex-col leading-tight">
+        <span className="truncate font-bangla text-[1.05rem] font-bold sm:text-lg">
+          মনির <span className="text-gold">রেন্ট এ কার</span>
         </span>
-        <span className="mt-1 text-[0.6rem] tracking-[0.32em] text-muted-foreground uppercase">
-          Dhaka · Bangladesh
+        <span className="truncate font-bangla text-[0.7rem] text-muted-foreground sm:text-xs">
+          {site.availability} · উত্তরা
         </span>
       </span>
     </Link>

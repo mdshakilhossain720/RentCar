@@ -4,7 +4,7 @@ import * as React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { AnimatePresence, motion } from "motion/react"
-import { Menu, Phone, X } from "lucide-react"
+import { Clock, MapPin, Menu, Phone, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { navLinks, site, telLink, whatsappLink } from "@/lib/site"
@@ -24,8 +24,14 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
 
-  // Close the mobile menu on navigation and lock body scroll while open.
-  React.useEffect(() => setOpen(false), [pathname])
+  // Close the mobile menu on navigation (adjusting state during render).
+  const [lastPath, setLastPath] = React.useState(pathname)
+  if (lastPath !== pathname) {
+    setLastPath(pathname)
+    setOpen(false)
+  }
+
+  // Lock body scroll and enable Escape-to-close while the menu is open.
   React.useEffect(() => {
     document.body.style.overflow = open ? "hidden" : ""
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false)
@@ -48,7 +54,32 @@ export function Header() {
           : "border-transparent bg-transparent"
       )}
     >
-      <div className="container-x flex h-20 items-center justify-between gap-6">
+      <div
+        className={cn(
+          "hidden overflow-hidden border-b border-white/8 bg-black/60 text-xs text-foreground/75 transition-[height] duration-300 md:block",
+          scrolled || open ? "h-0 border-transparent" : "h-9"
+        )}
+      >
+        <div className="container-x flex h-9 items-center justify-between gap-6">
+          <p className="flex min-w-0 items-center gap-2">
+            <MapPin className="size-3.5 shrink-0 text-gold" />
+            <span className="truncate">{site.contact.addressEn}</span>
+            <span className="hidden text-white/25 lg:inline">|</span>
+            <span className="hidden truncate text-gold/90 lg:inline">{site.society}</span>
+          </p>
+          <div className="flex shrink-0 items-center gap-5">
+            <span className="flex items-center gap-2">
+              <Clock className="size-3.5 text-gold" />
+              Open 24 Hours / 7 Days
+            </span>
+            <a href={telLink} className="flex items-center gap-2 transition hover:text-gold">
+              <Phone className="size-3.5 text-gold" />
+              {site.contact.phoneDisplay}
+            </a>
+          </div>
+        </div>
+      </div>
+      <div className="container-x flex h-20 items-center justify-between gap-4 lg:gap-6">
         <Logo />
 
         <nav aria-label="Main" className="hidden lg:block">
@@ -79,7 +110,7 @@ export function Header() {
             {site.contact.phoneDisplay}
           </a>
           <a
-            href={whatsappLink("Hello! I'd like to book a car.")}
+            href={whatsappLink("আসসালামু আলাইকুম, আমি একটি গাড়ি ভাড়া নিতে চাই।")}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Chat on WhatsApp"

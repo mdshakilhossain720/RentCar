@@ -1,37 +1,29 @@
 /**
- * Business details.
- *
- * DEMO DATA — every contact value below is a placeholder. Replace them with
- * the company's real phone, WhatsApp, email and address before going live.
- * They are kept in one place so a single edit updates the whole site.
+ * Business details — single source of truth for the header, contact
+ * section and footer.
  */
 export const site = {
-  name: "RENT A CAR",
-  shortName: "Rent A Car",
-  tagline: "Premium car rental in Dhaka",
+  name: "মনির রেন্ট এ কার",
+  nameEn: "Monir Rent A Car",
+  availability: "২৪ ঘন্টা / ৭ দিন",
+  availabilityEn: "24 Hours / 7 Days",
+  society: "Rent a Car Motor Society, Uttara",
   description:
-    "Reliable, comfortable and affordable car rental in Dhaka. Daily and monthly rentals, professional drivers, airport transfers and trips outside Dhaka.",
+    "Monir Rent A Car — reliable, comfortable and affordable car rental in Uttara, Dhaka. Daily and monthly rentals, professional drivers, airport transfers and trips outside Dhaka, 24 hours a day, 7 days a week.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
-  isDemo: true,
+  logo: "/images/brand/logo.png",
   contact: {
-    // Placeholder numbers in E.164 (for links) and display form.
-    phone: "+8801000000000",
-    phoneDisplay: "+880 1000-000000",
-    whatsapp: "8801000000000",
-    whatsappDisplay: "+880 1000-000000",
-    email: "booking@example.com",
-    address: "House 00, Road 00, Gulshan, Dhaka 1212 (demo address)",
-    mapQuery: "Gulshan, Dhaka, Bangladesh",
-    hours: [
-      { days: "Saturday – Thursday", time: "8:00 AM – 10:00 PM" },
-      { days: "Friday", time: "2:00 PM – 10:00 PM" },
-      { days: "Phone & WhatsApp support", time: "24/7" },
-    ],
-  },
-  social: {
-    facebook: "https://facebook.com/",
-    instagram: "https://instagram.com/",
-    youtube: "https://youtube.com/",
+    phone: "+8801919034366",
+    phoneDisplay: "01919034366",
+    // WhatsApp uses the same business number.
+    whatsapp: "8801919034366",
+    address:
+      "হাউজ - ৮১, রোড গাউছুল আজম এভিনিউ, সেক্টর - ১৪, উত্তরা, ঢাকা - ১২৩০",
+    addressEn:
+      "House 81, Road Gausul Azam Avenue, Sector 14, Uttara, Dhaka 1230",
+    // Used for the embedded Google Map and the "Open in Google Maps" link.
+    mapQuery: "House 81, Gausul Azam Avenue, Sector 14, Uttara, Dhaka 1230, Bangladesh",
+    hours: "২৪ ঘন্টা / ৭ দিন খোলা — Open 24 hours, 7 days a week",
   },
 } as const
 
@@ -45,22 +37,24 @@ export const navLinks = [
 ] as const
 
 export const pickupLocations = [
+  "Uttara",
+  "Airport (Hazrat Shahjalal)",
   "Gulshan",
   "Banani",
-  "Dhanmondi",
-  "Uttara",
-  "Mirpur",
-  "Motijheel",
+  "Baridhara",
   "Bashundhara R/A",
-  "Hazrat Shahjalal Int'l Airport",
+  "Mirpur",
+  "Dhanmondi",
+  "Motijheel",
 ] as const
 
-/** Builds a wa.me deep link with a pre-filled message. */
+/** wa.me deep link, optionally with a pre-filled message. */
 export function whatsappLink(message?: string) {
   const base = `https://wa.me/${site.contact.whatsapp}`
   return message ? `${base}?text=${encodeURIComponent(message)}` : base
 }
 
 export const telLink = `tel:${site.contact.phone}`
-export const mailLink = (subject?: string) =>
-  `mailto:${site.contact.email}${subject ? `?subject=${encodeURIComponent(subject)}` : ""}`
+
+export const mapEmbedSrc = `https://maps.google.com/maps?q=${encodeURIComponent(site.contact.mapQuery)}&z=15&output=embed`
+export const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(site.contact.mapQuery)}`

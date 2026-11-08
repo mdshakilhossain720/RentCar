@@ -1,9 +1,9 @@
 import { startingPrice, vehicles, type Vehicle } from "@/lib/vehicles"
 
 /**
- * Package pricing rules (DEMO). Every package price is derived from the
- * vehicle catalogue so nothing is hard-coded — change a vehicle's daily or
- * monthly rate and every package updates automatically.
+ * Package pricing rules (DEMO). Package prices are derived from the vehicle
+ * catalogue so nothing is hard-coded — change a vehicle's rate and every
+ * package updates. Vehicles without a listed price are skipped.
  */
 export const pricingRules = {
   /** Weekly price = 7 × daily rate, less this discount. */
@@ -15,18 +15,19 @@ export const pricingRules = {
 } as const
 
 const roundTo = (value: number, step = 100) => Math.round(value / step) * step
+const derive =
+  (factor: number) =>
+  (v: Pick<Vehicle, "dailyPrice">): number | null =>
+    v.dailyPrice === null ? null : roundTo(v.dailyPrice * factor)
 
-export const weeklyPrice = (v: Pick<Vehicle, "dailyPrice">) =>
-  roundTo(v.dailyPrice * 7 * (1 - pricingRules.weeklyDiscount))
+export const weeklyPrice = derive(7 * (1 - pricingRules.weeklyDiscount))
+export const airportTransferPrice = derive(pricingRules.airportTransferShare)
+export const outsideDhakaPrice = derive(pricingRules.outsideDhakaMultiplier)
 
-export const airportTransferPrice = (v: Pick<Vehicle, "dailyPrice">) =>
-  roundTo(v.dailyPrice * pricingRules.airportTransferShare)
-
-export const outsideDhakaPrice = (v: Pick<Vehicle, "dailyPrice">) =>
-  roundTo(v.dailyPrice * pricingRules.outsideDhakaMultiplier)
-
-const minOf = (fn: (v: Vehicle) => number) =>
-  Math.min(...vehicles.map(fn))
+function minOf(fn: (v: Vehicle) => number | null) {
+  const prices = vehicles.map(fn).filter((p): p is number => p !== null)
+  return prices.length ? Math.min(...prices) : null
+}
 
 export type RentalPackage = {
   id: string
@@ -40,6 +41,7 @@ export type RentalPackage = {
 }
 
 export function getRentalPackages(): RentalPackage[] {
+  const pct = `${pricingRules.weeklyDiscount * 100}%`
   return [
     {
       id: "daily",
@@ -47,11 +49,7 @@ export function getRentalPackages(): RentalPackage[] {
       price: startingPrice("dailyPrice"),
       unit: "/ day",
       description: "City travel, meetings and errands — book by the day.",
-      includes: [
-        "Up to 10 hours within Dhaka",
-        "Professional driver",
-        "Economy to luxury cars",
-      ],
+      includes: ["Up to 10 hours within Dhaka", "Professional driver", "Economy to luxury cars"],
       rentalType: "Daily",
     },
     {
@@ -59,12 +57,8 @@ export function getRentalPackages(): RentalPackage[] {
       name: "Weekly Rental",
       price: minOf(weeklyPrice),
       unit: "/ week",
-      description: `Seven days of flexibility with ${pricingRules.weeklyDiscount * 100}% off the daily rate.`,
-      includes: [
-        `${pricingRules.weeklyDiscount * 100}% weekly saving`,
-        "Same car all week",
-        "Free schedule changes",
-      ],
+      description: `Seven days of flexibility with ${pct} off the daily rate.`,
+      includes: [`${pct} weekly saving`, "Same car all week", "Free schedule changes"],
       rentalType: "Weekly",
     },
     {
@@ -73,11 +67,7 @@ export function getRentalPackages(): RentalPackage[] {
       price: startingPrice("monthlyPrice"),
       unit: "/ month",
       description: "Long-term transport for offices, projects and families.",
-      includes: [
-        "Dedicated vehicle & driver",
-        "Maintenance included",
-        "Replacement car support",
-      ],
+      includes: ["Dedicated vehicle & driver", "Maintenance included", "Replacement car support"],
       rentalType: "Monthly",
       featured: true,
     },
@@ -86,12 +76,8 @@ export function getRentalPackages(): RentalPackage[] {
       name: "Airport Transfer",
       price: minOf(airportTransferPrice),
       unit: "/ trip",
-      description: "On-time pickup and drop-off at Hazrat Shahjalal Airport.",
-      includes: [
-        "Flight tracking",
-        "Meet & greet at arrivals",
-        "Luggage assistance",
-      ],
+      description: "On-time pickup and drop-off at Hazrat Shahjalal Airport — minutes from Uttara.",
+      includes: ["Flight tracking", "Meet & greet at arrivals", "Luggage assistance"],
       rentalType: "Airport Transfer",
     },
     {
@@ -100,11 +86,7 @@ export function getRentalPackages(): RentalPackage[] {
       price: null,
       unit: "",
       description: "Fleet solutions with monthly billing for companies and NGOs.",
-      includes: [
-        "Multiple vehicles & drivers",
-        "Monthly invoicing",
-        "Dedicated account manager",
-      ],
+      includes: ["Multiple vehicles & drivers", "Monthly invoicing", "Dedicated account manager"],
       rentalType: "Corporate",
     },
     {
@@ -113,11 +95,7 @@ export function getRentalPackages(): RentalPackage[] {
       price: minOf(outsideDhakaPrice),
       unit: "/ day",
       description: "Intercity trips to Sylhet, Cox's Bazar, Chattogram and more.",
-      includes: [
-        "Experienced highway drivers",
-        "Driver allowance included",
-        "Round-trip & multi-day plans",
-      ],
+      includes: ["Experienced highway drivers", "Driver allowance included", "Round-trip & multi-day plans"],
       rentalType: "Outside Dhaka",
     },
   ]

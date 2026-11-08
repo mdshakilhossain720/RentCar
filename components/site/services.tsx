@@ -3,14 +3,14 @@ import Link from "next/link"
 import { ArrowRight, Check } from "lucide-react"
 
 import { services } from "@/lib/content"
-import { formatBDT, startingPrice } from "@/lib/vehicles"
+import { formatPrice, startingPrice } from "@/lib/vehicles"
 import { buttonVariants } from "@/components/ui/button"
 import { RevealGroup, RevealItem } from "@/components/site/reveal"
 import { SectionHeading } from "@/components/site/section-heading"
 
 const fromPrice: Record<string, string> = {
-  "daily-rent": `From ${formatBDT(startingPrice("dailyPrice"))} / day`,
-  "monthly-rent": `From ${formatBDT(startingPrice("monthlyPrice"))} / month`,
+  "daily-rent": `From ${formatPrice(startingPrice("dailyPrice"))} / day`,
+  "monthly-rent": `From ${formatPrice(startingPrice("monthlyPrice"))} / month`,
   "driver-support": "Driver included on request",
 }
 

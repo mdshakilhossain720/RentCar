@@ -1,14 +1,9 @@
 import Link from "next/link"
-import { Mail, MapPin, Phone } from "lucide-react"
+import { Clock, MapPin, Phone, Store } from "lucide-react"
 
-import { mailLink, site, telLink, whatsappLink } from "@/lib/site"
+import { mapLink, site, telLink, whatsappLink } from "@/lib/site"
 import { Logo } from "@/components/site/logo"
-import {
-  FacebookIcon,
-  InstagramIcon,
-  WhatsAppIcon,
-  YouTubeIcon,
-} from "@/components/site/brand-icons"
+import { WhatsAppIcon } from "@/components/site/brand-icons"
 
 const quickLinks = [
   { label: "Home", href: "/#home" },
@@ -24,12 +19,7 @@ const serviceLinks = [
   { label: "Monthly Rent", href: "/#monthly-rent" },
   { label: "Driver Support", href: "/#driver-support" },
   { label: "Airport Transfer", href: "/#pricing" },
-]
-
-const socials = [
-  { label: "Facebook", href: site.social.facebook, Icon: FacebookIcon },
-  { label: "Instagram", href: site.social.instagram, Icon: InstagramIcon },
-  { label: "YouTube", href: site.social.youtube, Icon: YouTubeIcon },
+  { label: "Outside Dhaka Trips", href: "/#pricing" },
 ]
 
 function FooterHeading({ children }: { children: React.ReactNode }) {
@@ -48,28 +38,18 @@ export function Footer() {
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent"
       />
-      <div className="container-x grid gap-12 py-16 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.3fr] lg:gap-10">
+      <div className="container-x grid gap-12 py-16 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1.5fr] lg:gap-10">
         <div className="flex flex-col gap-5">
-          <Logo />
-          <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
-            Reliable, comfortable and affordable car rental across Dhaka and
-            Bangladesh — daily, monthly and with professional drivers.
+          <Logo size="lg" />
+          <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
+            Reliable, comfortable and affordable car rental from Uttara — daily,
+            monthly and with professional drivers, available 24 hours a day, 7
+            days a week.
           </p>
-          <ul className="flex gap-3">
-            {socials.map(({ label, href, Icon }) => (
-              <li key={label}>
-                <a
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={label}
-                  className="grid size-10 place-items-center rounded-lg border border-white/10 text-muted-foreground transition hover:border-gold/60 hover:text-gold"
-                >
-                  <Icon className="size-[18px]" />
-                </a>
-              </li>
-            ))}
-          </ul>
+          <p className="inline-flex w-fit items-center gap-2 rounded-full border border-gold/30 bg-gold/5 px-3 py-1.5 text-xs text-gold">
+            <Store className="size-3.5" />
+            Member of {site.society}
+          </p>
         </div>
 
         <nav aria-label="Quick links">
@@ -108,16 +88,6 @@ export function Footer() {
               </a>
             </li>
             <li>
-              <a href={mailLink()} className="flex items-start gap-3 break-all transition hover:text-gold">
-                <Mail className="mt-0.5 size-4 shrink-0 text-gold" />
-                {site.contact.email}
-              </a>
-            </li>
-            <li className="flex items-start gap-3">
-              <MapPin className="mt-0.5 size-4 shrink-0 text-gold" />
-              {site.contact.address}
-            </li>
-            <li>
               <a
                 href={whatsappLink()}
                 target="_blank"
@@ -125,23 +95,36 @@ export function Footer() {
                 className="flex items-start gap-3 transition hover:text-gold"
               >
                 <WhatsAppIcon className="mt-0.5 size-4 shrink-0 text-[#25D366]" />
-                WhatsApp: {site.contact.whatsappDisplay}
+                WhatsApp: {site.contact.phoneDisplay}
               </a>
+            </li>
+            <li>
+              <a
+                href={mapLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-start gap-3 font-bangla leading-relaxed transition hover:text-gold"
+              >
+                <MapPin className="mt-1 size-4 shrink-0 text-gold" />
+                {site.contact.address}
+              </a>
+            </li>
+            <li className="flex items-start gap-3">
+              <Clock className="mt-0.5 size-4 shrink-0 text-gold" />
+              <span>
+                <span className="font-bangla">{site.availability}</span> — Open 24/7
+              </span>
             </li>
           </ul>
         </div>
       </div>
 
       <div className="border-t border-white/8">
-        <div className="container-x flex flex-col items-center justify-between gap-3 py-6 text-xs text-muted-foreground sm:flex-row">
+        <div className="container-x flex flex-col items-center justify-between gap-3 py-6 text-center text-xs text-muted-foreground sm:flex-row sm:text-left">
           <p>
-            © {year} {site.name}. All rights reserved.
+            © {year} <span className="font-bangla">{site.name}</span> ({site.nameEn}). All rights reserved.
           </p>
-          {site.isDemo ? (
-            <p className="text-center">
-              Demo website — contact details, prices and reviews are placeholders.
-            </p>
-          ) : null}
+          <p>Vehicle prices and reviews shown are sample data.</p>
         </div>
       </div>
     </footer>

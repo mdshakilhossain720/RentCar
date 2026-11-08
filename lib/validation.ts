@@ -146,21 +146,3 @@ export function validateContact(raw: Partial<Record<keyof ContactInput, unknown>
   return { data, errors, valid: Object.keys(errors).length === 0 }
 }
 
-/** Formats a booking as a WhatsApp-ready message. */
-export function bookingToMessage(b: BookingInput, reference?: string) {
-  const lines = [
-    "Hello! I'd like to book a car.",
-    reference ? `Reference: ${reference}` : null,
-    b.vehicle ? `Vehicle: ${b.vehicle}` : null,
-    `Rental type: ${b.rentalType}`,
-    `Driver required: ${b.driverRequired}`,
-    `Pickup: ${b.pickupLocation} — ${b.pickupDate}${b.pickupTime ? ` ${b.pickupTime}` : ""}`,
-    `Destination: ${b.destination}`,
-    `Return: ${b.returnDate}`,
-    `Name: ${b.name}`,
-    `Phone: ${b.phone}`,
-    b.email ? `Email: ${b.email}` : null,
-    b.message ? `Note: ${b.message}` : null,
-  ]
-  return lines.filter(Boolean).join("\n")
-}
