@@ -5,31 +5,6 @@
 
 export type FieldErrors<T> = Partial<Record<keyof T, string>>
 
-export const rentalTypes = [
-  "Daily",
-  "Weekly",
-  "Monthly",
-  "With Driver",
-  "Airport Transfer",
-  "Outside Dhaka",
-  "Corporate",
-] as const
-
-export type BookingInput = {
-  vehicle: string
-  name: string
-  phone: string
-  email: string
-  pickupLocation: string
-  destination: string
-  pickupDate: string
-  pickupTime: string
-  returnDate: string
-  rentalType: string
-  driverRequired: "Yes" | "No" | ""
-  message: string
-}
-
 export type ContactInput = {
   name: string
   phone: string
@@ -59,67 +34,7 @@ export function addDaysISO(iso: string, days: number) {
   return todayISO(d)
 }
 
-export function daysBetween(fromISO: string, toISO: string) {
-  const from = new Date(`${fromISO}T00:00:00`).getTime()
-  const to = new Date(`${toISO}T00:00:00`).getTime()
-  return Math.round((to - from) / 86_400_000)
-}
-
 const str = (v: unknown) => (typeof v === "string" ? v.trim() : "")
-
-export function validateBooking(
-  raw: Partial<Record<keyof BookingInput, unknown>>,
-  today = todayISO()
-) {
-  const data: BookingInput = {
-    vehicle: str(raw.vehicle),
-    name: str(raw.name),
-    phone: str(raw.phone),
-    email: str(raw.email),
-    pickupLocation: str(raw.pickupLocation),
-    destination: str(raw.destination),
-    pickupDate: str(raw.pickupDate),
-    pickupTime: str(raw.pickupTime),
-    returnDate: str(raw.returnDate),
-    rentalType: str(raw.rentalType),
-    driverRequired: (["Yes", "No"].includes(str(raw.driverRequired))
-      ? str(raw.driverRequired)
-      : "") as BookingInput["driverRequired"],
-    message: str(raw.message),
-  }
-  const errors: FieldErrors<BookingInput> = {}
-
-  if (data.name.length < 2) errors.name = "Please enter your full name."
-  else if (data.name.length > 80) errors.name = "Name is too long."
-
-  if (!data.phone) errors.phone = "Phone number is required."
-  else if (!isValidPhone(data.phone))
-    errors.phone = "Enter a valid Bangladeshi mobile number (01XXXXXXXXX)."
-
-  if (data.email && !isValidEmail(data.email))
-    errors.email = "Enter a valid email address."
-
-  if (!data.pickupLocation) errors.pickupLocation = "Pickup location is required."
-  if (!data.destination) errors.destination = "Destination is required."
-
-  if (!data.pickupDate) errors.pickupDate = "Choose a pickup date."
-  else if (data.pickupDate < today)
-    errors.pickupDate = "Pickup date can't be in the past."
-
-  if (!data.returnDate) errors.returnDate = "Choose a return date."
-  else if (data.pickupDate && data.returnDate < data.pickupDate)
-    errors.returnDate = "Return date must be on or after the pickup date."
-
-  if (!rentalTypes.includes(data.rentalType as (typeof rentalTypes)[number]))
-    errors.rentalType = "Select a rental type."
-
-  if (!data.driverRequired) errors.driverRequired = "Let us know if you need a driver."
-
-  if (data.message.length > 1000)
-    errors.message = "Message must be under 1000 characters."
-
-  return { data, errors, valid: Object.keys(errors).length === 0 }
-}
 
 export function validateContact(raw: Partial<Record<keyof ContactInput, unknown>>) {
   const data: ContactInput = {

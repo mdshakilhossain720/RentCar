@@ -1,45 +1,17 @@
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowUpRight, Cog, Fuel, Snowflake, Users } from "lucide-react"
+import { Cog, Fuel, Phone, Snowflake, Users } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { CONTACT_FOR_PRICE, formatBDT, type Vehicle } from "@/lib/vehicles"
+import { bookingMessage, telLink, whatsappLink } from "@/lib/site"
+import { type Vehicle } from "@/lib/vehicles"
 import { buttonVariants } from "@/components/ui/button"
+import { WhatsAppIcon } from "@/components/site/brand-icons"
 
 export const availabilityTone: Record<Vehicle["availability"], string> = {
   Available: "border-success/50 bg-black/70 text-success",
   Limited: "border-gold/50 bg-black/70 text-gold",
   "On request": "border-white/25 bg-black/70 text-foreground/85",
-}
-
-function PriceCell({
-  label,
-  amount,
-  unit,
-  highlight,
-  className,
-}: {
-  label: string
-  amount: number | null
-  unit: string
-  highlight?: boolean
-  className?: string
-}) {
-  return (
-    <div className={cn("min-w-0", className)}>
-      <p className="text-[0.7rem] tracking-wider text-muted-foreground uppercase">{label}</p>
-      {amount === null ? (
-        <p className="mt-0.5 text-[0.8rem] leading-tight font-medium text-foreground/85">
-          {CONTACT_FOR_PRICE}
-        </p>
-      ) : (
-        <p className={cn("text-[0.95rem] font-semibold whitespace-nowrap", highlight && "text-gold")}>
-          {formatBDT(amount)}
-          <span className="text-xs font-normal text-muted-foreground"> {unit}</span>
-        </p>
-      )}
-    </div>
-  )
 }
 
 type VehicleCardProps = {
@@ -115,21 +87,27 @@ export function VehicleCard({ vehicle: v, query, className }: VehicleCardProps) 
           ))}
         </ul>
 
-        <div className="grid grid-cols-2 gap-3 rounded-xl border border-white/8 bg-white/[0.02] p-3">
-          <PriceCell label="Daily" amount={v.dailyPrice} unit="/day" highlight />
-          <PriceCell label="Monthly" amount={v.monthlyPrice} unit="/mo" className="border-l border-white/8 pl-3" />
-        </div>
-
-        <div className="mt-auto grid grid-cols-2 gap-3">
-          <Link href={href} className={buttonVariants({ variant: "glass", size: "lg", className: "h-10" })}>
-            View Details
-          </Link>
-          <Link
-            href={`${href}#book`}
-            className={buttonVariants({ variant: "gold", size: "lg", className: "h-10" })}
-          >
-            Book Now
-            <ArrowUpRight />
+        <div className="mt-auto flex flex-col gap-3">
+          <div className="grid grid-cols-2 gap-3">
+            <a
+              href={telLink}
+              aria-label={`Call to book ${v.name}`}
+              className={buttonVariants({ variant: "gold", size: "lg", className: "h-10" })}
+            >
+              <Phone /> Call to Book
+            </a>
+            <a
+              href={whatsappLink(bookingMessage(v.name))}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Book ${v.name} on WhatsApp`}
+              className={buttonVariants({ variant: "glass", size: "lg", className: "h-10" })}
+            >
+              <WhatsAppIcon className="size-4 text-[#25D366]" /> WhatsApp
+            </a>
+          </div>
+          <Link href={href} className="text-center text-sm text-muted-foreground transition hover:text-gold">
+            View details →
           </Link>
         </div>
       </div>

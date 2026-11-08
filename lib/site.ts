@@ -54,6 +54,15 @@ export function whatsappLink(message?: string) {
   return message ? `${base}?text=${encodeURIComponent(message)}` : base
 }
 
+/** Pre-filled WhatsApp booking message for a vehicle, with optional trip details. */
+export function bookingMessage(vehicleName: string, details: string[] = []) {
+  return [
+    `আসসালামু আলাইকুম! I'd like to book the ${vehicleName}.`,
+    ...details,
+    "Please confirm availability and price.",
+  ].join("\n")
+}
+
 export const telLink = `tel:${site.contact.phone}`
 
 export const mapEmbedSrc = `https://maps.google.com/maps?q=${encodeURIComponent(site.contact.mapQuery)}&z=15&output=embed`

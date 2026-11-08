@@ -1,10 +1,9 @@
 /**
  * Vehicle catalogue.
  *
- * DEMO DATA — models, years and rates are illustrative placeholders based on
+ * DEMO DATA — models and years are illustrative placeholders based on
  * typical Dhaka rental listings. They are NOT live availability or quotes.
- * Replace with the company's real fleet before launch. Prices are in BDT;
- * a null price is shown as "Contact for Price".
+ * Replace with the company's real fleet before launch.
  */
 
 export const categories = [
@@ -47,8 +46,6 @@ export type Vehicle = {
   transmission: "Automatic" | "Manual"
   fuel: "Octane" | "Hybrid" | "Diesel" | "Octane / CNG"
   ac: boolean
-  dailyPrice: number | null
-  monthlyPrice: number | null
   images: VehicleImage[]
   summary: string
   features: string[]
@@ -73,8 +70,6 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     fuel: "Octane / CNG",
     ac: true,
-    dailyPrice: 3500,
-    monthlyPrice: 75000,
     images: [
       {
         src: "/images/fleet/axio-1.jpg",
@@ -109,8 +104,6 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     fuel: "Octane",
     ac: true,
-    dailyPrice: 4000,
-    monthlyPrice: 85000,
     images: [
       {
         src: "/images/fleet/allion-1.jpg",
@@ -146,8 +139,6 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     fuel: "Octane",
     ac: true,
-    dailyPrice: 4500,
-    monthlyPrice: 95000,
     images: [
       {
         src: "/images/fleet/premio-1.jpg",
@@ -178,8 +169,6 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     fuel: "Hybrid",
     ac: true,
-    dailyPrice: 7500,
-    monthlyPrice: 160000,
     images: [
       {
         src: "/images/fleet/camry-1.jpg",
@@ -209,8 +198,6 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     fuel: "Octane",
     ac: true,
-    dailyPrice: 12000,
-    monthlyPrice: 260000,
     images: [
       {
         src: "/images/fleet/cclass-1.jpg",
@@ -240,8 +227,6 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     fuel: "Octane",
     ac: true,
-    dailyPrice: 8000,
-    monthlyPrice: 170000,
     images: [
       {
         src: "/images/fleet/crv-1.jpg",
@@ -271,8 +256,6 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     fuel: "Diesel",
     ac: true,
-    dailyPrice: 12000,
-    monthlyPrice: 250000,
     images: [
       {
         src: "/images/fleet/prado-1.jpg",
@@ -308,8 +291,6 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     fuel: "Hybrid",
     ac: true,
-    dailyPrice: 18000,
-    monthlyPrice: null,
     images: [
       {
         src: "/images/fleet/bmw5-1.jpg",
@@ -339,8 +320,6 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     fuel: "Diesel",
     ac: true,
-    dailyPrice: null,
-    monthlyPrice: null,
     images: [
       {
         src: "/images/fleet/rangerover-1.jpg",
@@ -370,8 +349,6 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     fuel: "Octane",
     ac: true,
-    dailyPrice: 5500,
-    monthlyPrice: 120000,
     images: [
       {
         src: "/images/fleet/noah-1.jpg",
@@ -407,8 +384,6 @@ export const vehicles: Vehicle[] = [
     transmission: "Manual",
     fuel: "Diesel",
     ac: true,
-    dailyPrice: 7000,
-    monthlyPrice: 150000,
     images: [
       {
         src: "/images/fleet/hiace-1.jpg",
@@ -455,27 +430,4 @@ export function getRelatedVehicles(vehicle: Vehicle, count = 3) {
     (v) => v.slug !== vehicle.slug && v.category !== vehicle.category
   )
   return [...sameCategory, ...others].slice(0, count)
-}
-
-/** Lowest listed daily/monthly rate across the fleet (null prices ignored). */
-export function startingPrice(
-  kind: "dailyPrice" | "monthlyPrice",
-  filter?: (v: Vehicle) => boolean
-) {
-  const list = (filter ? vehicles.filter(filter) : vehicles)
-    .map((v) => v[kind])
-    .filter((p): p is number => p !== null)
-  return list.length ? Math.min(...list) : null
-}
-
-export const CONTACT_FOR_PRICE = "Contact for Price"
-
-const bdt = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 })
-
-export function formatBDT(amount: number) {
-  return `৳${bdt.format(amount)}`
-}
-
-export function formatPrice(amount: number | null) {
-  return amount === null ? CONTACT_FOR_PRICE : formatBDT(amount)
 }

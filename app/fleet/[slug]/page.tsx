@@ -3,13 +3,13 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import {
   ArrowLeft,
-  Briefcase,
   CalendarDays,
   Check,
   CircleCheck,
   Cog,
   Fuel,
   Luggage,
+  MessageCircle,
   Phone,
   ShieldCheck,
   Snowflake,
@@ -17,19 +17,16 @@ import {
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { site, telLink } from "@/lib/site"
+import { bookingMessage, site, telLink, whatsappLink } from "@/lib/site"
 import {
-  CONTACT_FOR_PRICE,
   categoryLabels,
-  formatBDT,
   getRelatedVehicles,
   getVehicle,
   rentalTerms,
   vehicles,
 } from "@/lib/vehicles"
-import { airportTransferPrice, outsideDhakaPrice, weeklyPrice } from "@/lib/pricing"
 import { buttonVariants } from "@/components/ui/button"
-import { BookingForm } from "@/components/site/booking-form"
+import { WhatsAppIcon } from "@/components/site/brand-icons"
 import { VehicleGallery } from "@/components/site/vehicle-gallery"
 import { VehicleCard, availabilityTone } from "@/components/site/vehicle-card"
 import { Reveal } from "@/components/site/reveal"
@@ -45,10 +42,9 @@ export async function generateMetadata({ params }: PageProps<"/fleet/[slug]">): 
   const { slug } = await params
   const v = getVehicle(slug)
   if (!v) return { title: "Vehicle not found" }
-  const price = v.dailyPrice === null ? "" : ` from ${formatBDT(v.dailyPrice)}/day`
   return {
     title: `${v.name} ${v.year} for Rent in Dhaka`,
-    description: `Rent a ${v.name} (${v.model}, ${v.year}) in Uttara, Dhaka${price}. ${v.passengers} seats, ${v.transmission.toLowerCase()}, ${v.fuel}. ${v.summary}`,
+    description: `Rent a ${v.name} (${v.model}, ${v.year}) in Uttara, Dhaka. ${v.passengers} seats, ${v.transmission.toLowerCase()}, ${v.fuel}. ${v.summary}`,
     alternates: { canonical: `/fleet/${v.slug}` },
     openGraph: { images: [{ url: v.images[0].src, alt: v.images[0].alt }] },
   }
@@ -62,13 +58,15 @@ export default async function VehiclePage({ params, searchParams }: PageProps<"/
   if (!vehicle) notFound()
 
   const sp = await searchParams
-  const defaults = {
-    pickupLocation: one(sp.pickup),
-    destination: one(sp.dropoff),
-    pickupDate: one(sp.from),
-    returnDate: one(sp.to),
-    rentalType: one(sp.rental),
-  }
+  // Trip details forwarded from the search form are added to the WhatsApp message.
+  const trip = [
+    one(sp.pickup) && `Pickup: ${one(sp.pickup)}`,
+    one(sp.dropoff) && `Destination: ${one(sp.dropoff)}`,
+    one(sp.from) && `From: ${one(sp.from)}`,
+    one(sp.to) && `To: ${one(sp.to)}`,
+    one(sp.rental) && `Rental type: ${one(sp.rental)}`,
+  ].filter((x): x is string => !!x)
+  const waHref = whatsappLink(bookingMessage(`${vehicle.name} (${vehicle.year})`, trip))
 
   const specs = [
     { icon: CalendarDays, label: "Model Year", value: String(vehicle.year) },
@@ -77,14 +75,6 @@ export default async function VehiclePage({ params, searchParams }: PageProps<"/
     { icon: Cog, label: "Transmission", value: vehicle.transmission },
     { icon: Fuel, label: "Fuel Type", value: vehicle.fuel },
     { icon: Snowflake, label: "Air Conditioning", value: vehicle.ac ? "Yes" : "No" },
-  ]
-
-  const priceRows = [
-    { label: "Daily", value: vehicle.dailyPrice, unit: "/ day" },
-    { label: "Weekly", value: weeklyPrice(vehicle), unit: "/ week" },
-    { label: "Monthly", value: vehicle.monthlyPrice, unit: "/ month" },
-    { label: "Airport transfer", value: airportTransferPrice(vehicle), unit: "/ trip" },
-    { label: "Outside Dhaka", value: outsideDhakaPrice(vehicle), unit: "/ day" },
   ]
 
   const related = getRelatedVehicles(vehicle, 4)
@@ -189,44 +179,38 @@ export default async function VehiclePage({ params, searchParams }: PageProps<"/
               </Reveal>
             </div>
 
-            {/* Right: pricing + booking (sticky on desktop) */}
+            {/* Right: booking by phone / WhatsApp (sticky on desktop) */}
             <aside className="flex min-w-0 flex-col gap-6 lg:sticky lg:top-28 lg:self-start">
-              <Reveal className="rounded-2xl border border-gold/30 bg-gradient-to-b from-gold/10 to-card p-6">
+              <Reveal id="book" className="scroll-mt-32 rounded-2xl border border-gold/30 bg-gradient-to-b from-gold/10 to-card p-6 sm:p-7">
                 <div className="flex items-center justify-between gap-3">
-                  <h2 className="font-display text-xl font-semibold">Rental Pricing</h2>
-                  <Briefcase className="size-5 text-gold" />
+                  <h2 className="font-display text-2xl font-semibold">Book this car</h2>
+                  <MessageCircle className="size-5 text-gold" />
                 </div>
-                <dl className="mt-4 divide-y divide-white/8 text-sm">
-                  {priceRows.map((r) => (
-                    <div key={r.label} className="flex items-baseline justify-between gap-4 py-2.5">
-                      <dt className="text-muted-foreground">{r.label}</dt>
-                      <dd className={cn("text-right", r.value === null ? "text-foreground/85" : "font-semibold text-gold")}>
-                        {r.value === null ? CONTACT_FOR_PRICE : (
-                          <>
-                            {formatBDT(r.value)} <span className="text-xs font-normal text-muted-foreground">{r.unit}</span>
-                          </>
-                        )}
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-                <p className="mt-3 text-xs text-muted-foreground">Sample rates — final price confirmed on call.</p>
-                <a href={telLink} className={buttonVariants({ variant: "glass", size: "lg", className: "mt-4 h-11 w-full" })}>
-                  <Phone className="text-gold" /> Ask for a quote · {site.contact.phoneDisplay}
-                </a>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Call or WhatsApp us with your trip details — we&apos;ll confirm availability and the
+                  rate for the {vehicle.name} right away. Open 24/7.
+                </p>
+                <div className="mt-6 flex flex-col gap-3">
+                  <a href={telLink} className={buttonVariants({ variant: "gold", size: "xl", className: "w-full" })}>
+                    <Phone /> Call {site.contact.phoneDisplay}
+                  </a>
+                  <a
+                    href={waHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={buttonVariants({ variant: "glass", size: "xl", className: "w-full" })}
+                  >
+                    <WhatsAppIcon className="size-5 text-[#25D366]" /> Book on WhatsApp
+                  </a>
+                </div>
+                {trip.length ? (
+                  <ul className="mt-5 flex flex-col gap-1.5 rounded-xl border border-white/8 bg-white/[0.02] p-4 text-sm text-muted-foreground">
+                    {trip.map((t) => (
+                      <li key={t}>{t}</li>
+                    ))}
+                  </ul>
+                ) : null}
               </Reveal>
-
-              <div id="book" className="scroll-mt-32">
-                <BookingForm
-                  vehicle={{
-                    slug: vehicle.slug,
-                    name: vehicle.name,
-                    dailyPrice: vehicle.dailyPrice,
-                    monthlyPrice: vehicle.monthlyPrice,
-                  }}
-                  defaults={defaults}
-                />
-              </div>
             </aside>
           </div>
         </div>
