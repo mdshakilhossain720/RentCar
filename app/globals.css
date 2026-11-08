@@ -1,0 +1,130 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-heading: var(--font-display);
+  --font-display: var(--font-display);
+  --font-sans: var(--font-sans);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-success: var(--success);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* Premium automotive palette: black, charcoal, white and gold.
+   The site is dark-only, so :root and .dark share the same tokens. */
+:root,
+.dark {
+  --background: oklch(0.155 0.006 260);
+  --surface: oklch(0.185 0.007 260);
+  --surface-2: oklch(0.215 0.008 260);
+  --foreground: oklch(0.97 0.003 90);
+  --card: oklch(0.19 0.007 260);
+  --card-foreground: oklch(0.97 0.003 90);
+  --popover: oklch(0.2 0.007 260);
+  --popover-foreground: oklch(0.97 0.003 90);
+  --gold: oklch(0.82 0.12 84);
+  --gold-soft: oklch(0.88 0.09 88);
+  --primary: oklch(0.82 0.12 84);
+  --primary-foreground: oklch(0.17 0.01 260);
+  --secondary: oklch(0.25 0.008 260);
+  --secondary-foreground: oklch(0.97 0.003 90);
+  --muted: oklch(0.24 0.008 260);
+  --muted-foreground: oklch(0.72 0.01 260);
+  --accent: oklch(0.26 0.01 260);
+  --accent-foreground: oklch(0.97 0.003 90);
+  --destructive: oklch(0.68 0.19 25);
+  --success: oklch(0.74 0.15 155);
+  --border: oklch(1 0 0 / 9%);
+  --input: oklch(1 0 0 / 14%);
+  --ring: oklch(0.82 0.12 84 / 70%);
+  --radius: 0.75rem;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply scroll-smooth bg-background font-sans;
+    scroll-padding-top: 5.5rem;
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+  ::selection {
+    background: var(--gold);
+    color: var(--primary-foreground);
+  }
+  input[type="date"]::-webkit-calendar-picker-indicator,
+  input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.8) sepia(1) saturate(3) hue-rotate(5deg);
+    cursor: pointer;
+  }
+}
+
+@layer utilities {
+  .text-gold-gradient {
+    background-image: linear-gradient(
+      100deg,
+      var(--gold) 0%,
+      var(--gold-soft) 50%,
+      var(--gold) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .bg-gold-gradient {
+    background-image: linear-gradient(
+      100deg,
+      var(--gold) 0%,
+      var(--gold-soft) 100%
+    );
+  }
+  .container-x {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
