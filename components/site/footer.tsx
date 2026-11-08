@@ -10,7 +10,7 @@ const quickLinks = [
   { label: "About Us", href: "/#about" },
   { label: "Our Fleet", href: "/fleet" },
   { label: "Services", href: "/#services" },
-  { label: "Pricing", href: "/#pricing" },
+  { label: "How It Works", href: "/#how-it-works" },
   { label: "Contact", href: "/#contact" },
 ]
 
@@ -18,8 +18,8 @@ const serviceLinks = [
   { label: "Daily Rent", href: "/#daily-rent" },
   { label: "Monthly Rent", href: "/#monthly-rent" },
   { label: "Driver Support", href: "/#driver-support" },
-  { label: "Airport Transfer", href: "/#pricing" },
-  { label: "Outside Dhaka Trips", href: "/#pricing" },
+  { label: "Airport Transfer", href: "/#services" },
+  { label: "Outside Dhaka Trips", href: "/#services" },
 ]
 
 function FooterHeading({ children }: { children: React.ReactNode }) {
@@ -124,7 +124,7 @@ export function Footer() {
           <p>
             © {year} <span className="font-bangla">{site.name}</span> ({site.nameEn}). All rights reserved.
           </p>
-          <p>Vehicle prices and reviews shown are sample data.</p>
+          <p>Vehicle details and reviews shown are sample data.</p>
         </div>
       </div>
     </footer>

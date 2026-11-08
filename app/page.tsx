@@ -5,7 +5,6 @@ import { About } from "@/components/site/about"
 import { FleetSection } from "@/components/site/fleet-section"
 import { HowItWorks } from "@/components/site/how-it-works"
 import { WhyUs } from "@/components/site/why-us"
-import { Pricing } from "@/components/site/pricing"
 import { CtaBand } from "@/components/site/cta-band"
 import { Testimonials } from "@/components/site/testimonials"
 import { Faq } from "@/components/site/faq"
@@ -57,7 +56,6 @@ export default function HomePage() {
       <FleetSection />
       <HowItWorks />
       <WhyUs />
-      <Pricing />
       <CtaBand />
       <Testimonials />
       <Faq />

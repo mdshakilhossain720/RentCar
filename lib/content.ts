@@ -98,7 +98,7 @@ export const steps: Step[] = [
   {
     number: "03",
     title: "Confirm Your Booking",
-    description: "Submit your booking information and receive confirmation.",
+    description: "Call or WhatsApp us with your trip details and get instant confirmation.",
     icon: ClipboardCheck,
   },
   {
@@ -137,9 +137,9 @@ export const whyUs: Feature[] = [
     icon: Sparkles,
   },
   {
-    title: "Easy Online Booking",
+    title: "Easy Phone & WhatsApp Booking",
     description:
-      "Reserve in minutes online or on WhatsApp and get a fast confirmation from our team.",
+      "Reserve in minutes with a quick call or WhatsApp message and get a fast confirmation from our team.",
     icon: BadgeCheck,
   },
   {
@@ -226,7 +226,7 @@ export const testimonials: Testimonial[] = [
 export const faqs = [
   {
     q: "How can I book a rental car?",
-    a: "Browse our fleet, open the car you like and fill in the booking form — or call or WhatsApp us with your trip details. Our team confirms availability and the final price before your booking is locked in.",
+    a: "Browse our fleet, pick the car you like and tap Call or WhatsApp to send us your trip details. Our team confirms availability and the final price before your booking is locked in.",
   },
   {
     q: "Do you provide cars with drivers?",

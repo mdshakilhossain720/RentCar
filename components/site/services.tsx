@@ -3,16 +3,9 @@ import Link from "next/link"
 import { ArrowRight, Check } from "lucide-react"
 
 import { services } from "@/lib/content"
-import { formatPrice, startingPrice } from "@/lib/vehicles"
 import { buttonVariants } from "@/components/ui/button"
 import { RevealGroup, RevealItem } from "@/components/site/reveal"
 import { SectionHeading } from "@/components/site/section-heading"
-
-const fromPrice: Record<string, string> = {
-  "daily-rent": `From ${formatPrice(startingPrice("dailyPrice"))} / day`,
-  "monthly-rent": `From ${formatPrice(startingPrice("monthlyPrice"))} / month`,
-  "driver-support": "Driver included on request",
-}
 
 export function Services() {
   return (
@@ -47,9 +40,6 @@ export function Services() {
                   <span className="absolute top-4 left-4 font-display text-5xl font-bold text-white/90 drop-shadow-lg">
                     {s.number}
                     <span className="text-gold">.</span>
-                  </span>
-                  <span className="absolute right-4 bottom-4 rounded-full border border-white/15 bg-black/50 px-3 py-1 text-xs text-foreground/90 backdrop-blur">
-                    {fromPrice[s.id]}
                   </span>
                 </div>
                 <div className="flex flex-1 flex-col gap-5 p-6 sm:p-7">

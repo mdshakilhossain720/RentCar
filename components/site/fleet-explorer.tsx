@@ -13,8 +13,6 @@ import { VehicleCard } from "@/components/site/vehicle-card"
 
 const sorts = {
   recommended: "Recommended",
-  "price-asc": "Price: Low to High",
-  "price-desc": "Price: High to Low",
   "seats-desc": "Most Seats",
   newest: "Newest Models",
 } as const
@@ -58,13 +56,6 @@ export function FleetExplorer({
     })
     const sorted = [...list]
     switch (sort) {
-      // Vehicles without a listed price ("Contact for Price") sort last.
-      case "price-asc":
-        sorted.sort((a, b) => (a.dailyPrice ?? Infinity) - (b.dailyPrice ?? Infinity))
-        break
-      case "price-desc":
-        sorted.sort((a, b) => (b.dailyPrice ?? -Infinity) - (a.dailyPrice ?? -Infinity))
-        break
       case "seats-desc":
         sorted.sort((a, b) => b.passengers - a.passengers)
         break
