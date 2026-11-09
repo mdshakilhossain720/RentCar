@@ -26,11 +26,11 @@ export function Logo({
         className="shrink-0 rounded-full drop-shadow-[0_0_14px_rgba(226,185,85,0.25)] transition-transform duration-500 group-hover:rotate-[8deg]"
       />
       <span className="flex min-w-0 flex-col leading-tight">
-        <span className="truncate font-bangla text-[1.05rem] font-bold sm:text-lg">
-          রেন্ট এ কার <span className="text-gold">মোটর সোসাইটি</span>
+        <span className="truncate font-display text-[1.05rem] font-bold sm:text-lg">
+          Rent a Car <span className="text-gold">Motor Society</span>
         </span>
-        <span className="truncate font-bangla text-[0.7rem] text-muted-foreground sm:text-xs">
-          উত্তরা · {site.availability}
+        <span className="truncate text-[0.7rem] text-muted-foreground sm:text-xs">
+          Uttara · <span className="font-bangla">{site.availability}</span>
         </span>
       </span>
     </Link>
