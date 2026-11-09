@@ -3,13 +3,13 @@
  * section and footer.
  */
 export const site = {
-  name: "মনির রেন্ট এ কার",
-  nameEn: "Monir Rent A Car",
+  name: "রেন্ট এ কার মোটর সোসাইটি, উত্তরা",
+  nameEn: "Rent a Car Motor Society Uttara",
   availability: "২৪ ঘন্টা / ৭ দিন",
   availabilityEn: "24 Hours / 7 Days",
-  society: "Rent a Car Motor Society, Uttara",
+  society: "Rent a Car Motor Society Uttara",
   description:
-    "Monir Rent A Car — reliable, comfortable and affordable car rental in Uttara, Dhaka. Daily and monthly rentals, professional drivers, airport transfers and trips outside Dhaka, 24 hours a day, 7 days a week.",
+    "Rent a Car Motor Society Uttara — reliable, comfortable and affordable car rental in Uttara, Dhaka. Daily and monthly rentals, professional drivers, airport transfers and trips outside Dhaka, 24 hours a day, 7 days a week.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   logo: "/images/brand/logo.png",
   contact: {

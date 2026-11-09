@@ -38,7 +38,8 @@ export const metadata: Metadata = {
     "car with driver Dhaka",
     "Hiace rent",
     "microbus rent",
-    "মনির রেন্ট এ কার",
+    "রেন্ট এ কার মোটর সোসাইটি উত্তরা",
+    "Rent a Car Motor Society Uttara",
   ],
   openGraph: {
     type: "website",

@@ -20,17 +20,17 @@ export function Logo({
     >
       <Image
         src={site.logo}
-        alt="Rent A Car Motor Society, Uttara logo"
+        alt={`${site.nameEn} logo`}
         width={px}
         height={px}
         className="shrink-0 rounded-full drop-shadow-[0_0_14px_rgba(226,185,85,0.25)] transition-transform duration-500 group-hover:rotate-[8deg]"
       />
       <span className="flex min-w-0 flex-col leading-tight">
         <span className="truncate font-bangla text-[1.05rem] font-bold sm:text-lg">
-          মনির <span className="text-gold">রেন্ট এ কার</span>
+          রেন্ট এ কার <span className="text-gold">মোটর সোসাইটি</span>
         </span>
         <span className="truncate font-bangla text-[0.7rem] text-muted-foreground sm:text-xs">
-          {site.availability} · উত্তরা
+          উত্তরা · {site.availability}
         </span>
       </span>
     </Link>
